@@ -40,8 +40,7 @@ public class Main {
         System.out.println(val3);
 
         //테스트 봇 만들기
-        TestApp app = new TestApp();
-        app.run();
+
     }
 
 }
