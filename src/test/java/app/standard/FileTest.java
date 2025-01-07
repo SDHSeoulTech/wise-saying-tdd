@@ -28,7 +28,7 @@ public class FileTest {
     @AfterAll
     static void afterAll() {
         System.out.println("테스트 실행 후에 한번 실행");
-        Util.File.delete("test");
+        Util.File.deleteForce("test");
     }
 
     @Test
@@ -117,9 +117,36 @@ public class FileTest {
     void t7() {
         String dirPath = "test";
 
-        Util.File.delete(dirPath);
+        Util.File.deleteForce(dirPath);
 
         assertThat(Files.exists(Paths.get(dirPath)))
                 .isFalse();
+    }
+
+    @Test
+    @DisplayName("파일 생성 -> 없는 폴더에 생성 시도하면 폴더를 생성한 후에 파일 생성")
+    void t8() {
+        String path = "test/test2/test.txt";
+
+        Util.File.createFile(path);
+
+        boolean rst = Files.exists(Paths.get(path));
+
+        assertThat(rst)
+                .isTrue();
+    }
+
+    @Test
+    @DisplayName("파일 삭제 -> 포럳가 비어있지 않을 때 안의 내용까지 같이 삭제")
+    void t9() {
+        String path = "test/test2/test.txt";
+
+        Util.File.deleteForce(path); // 강제 삭제
+
+        boolean rst = Files.exists(Paths.get(path));
+
+        assertThat(rst)
+                .isFalse();
+
     }
 }

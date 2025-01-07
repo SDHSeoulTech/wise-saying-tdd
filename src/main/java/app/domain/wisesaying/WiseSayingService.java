@@ -1,12 +1,16 @@
 package app.domain.wisesaying;
+import app.domain.wisesaying.repository.WiseSayingFileRepository;
+import app.domain.wisesaying.repository.WiseSayingMemRepository;
+import app.domain.wisesaying.repository.WiseSayingRepository;
+
 import java.util.List;
 import java.util.Optional;
 
 public class WiseSayingService {
-    private WiseSayingRepository wiseSayingRepository;
+    private final WiseSayingRepository wiseSayingRepository;
 
     public WiseSayingService() {
-        wiseSayingRepository = new WiseSayingRepository();
+        wiseSayingRepository = new WiseSayingFileRepository();
     }
     public WiseSaying write(String content, String author) {
 
