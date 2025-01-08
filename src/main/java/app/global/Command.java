@@ -44,12 +44,12 @@ public class Command {
         return paramMap.get(key);
     }
 
-    public int getParamAsInt(String key) {
+    public int getParamAsInt(String key, int defaultValue) {
         try {
             String param = paramMap.get(key);
             return Integer.parseInt(param);
         } catch (NumberFormatException e) {
-            return 0;
+            return defaultValue;
         }
 
     }

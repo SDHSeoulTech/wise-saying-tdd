@@ -1,5 +1,6 @@
 package app.domain.wisesaying.repository;
 
+import app.domain.wisesaying.Page;
 import app.domain.wisesaying.WiseSaying;
 import app.domain.wisesaying.WiseSayingService;
 import app.global.AppConfig;
@@ -50,8 +51,8 @@ public class WiseSayingFileRepository implements WiseSayingRepository{
         return wiseSaying;
     }
 
-    public List<WiseSaying> findAll() {
-        return Util.File.getPaths(DB_PATH).stream()
+    public Page findAll() {
+        Util.File.getPaths(DB_PATH).stream()
                 .map(Path::toString)
                 .filter(path -> path.endsWith(".json"))
                 .map(Util.Json::readAsMap)
@@ -106,7 +107,19 @@ public class WiseSayingFileRepository implements WiseSayingRepository{
         Util.File.write(BUILD_PATH, jsonStr);
     }
 
+    @Override
+    public void makeSampleData(int cnt) {
+        for(int i = 1; i <= cnt; i++) {
+            WiseSaying wiseSaying = new WiseSaying(i, "명언" + i, "작가" + i);
+            save(wiseSaying);
+        }
+    }
+
     public static String getBuildPath() {
         return BUILD_PATH;
+    }
+
+    public int count() {
+        return findAll().size();
     }
 }

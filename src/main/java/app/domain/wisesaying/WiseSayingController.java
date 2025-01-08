@@ -2,6 +2,7 @@ package app.domain.wisesaying;
 
 import app.global.Command;
 
+import java.nio.file.Path;
 import java.util.List;
 import java.util.Optional;
 import java.util.Scanner;
@@ -31,6 +32,9 @@ public class WiseSayingController {
     public void actionPrint(Command command) {
         System.out.println("번호 / 작가 / 명언");
         System.out.println("-----------------");
+
+
+        int page = command.getParamAsInt("page", 1);
         List<WiseSaying> wiseSayingList;
 
         if(command.isSearchCommand()) {
@@ -50,10 +54,32 @@ public class WiseSayingController {
         wiseSayingList.reversed().forEach(w -> {
             System.out.printf("%d / %s / %s\n", w.getId(), w.getAuthor(), w.getContent());
         });
+
+        printPage(page);
+    }
+
+    private void printPage(int page) {
+
+        // 2대신 전체 페이지 개수로 세팅
+        int totalItems = wiseSayingService.count();
+        int itemsPerPage = 5;
+        int totalPages = (int)Math.ceil((double)totalItems / itemsPerPage); // -> 올림 처리
+
+        for(int i = 1; i <= totalPages; i++) {
+            if(i == page) {
+                System.out.print("[%d]".formatted(i));
+            } else {
+                System.out.print("%d".formatted(i));
+            }
+            if(i == totalPages) {
+                System.out.println("");
+            }
+            System.out.print(" / ");
+        }
     }
 
     public void actionDelete(Command cmd) {
-        int id = cmd.getParamAsInt("id");
+        int id = cmd.getParamAsInt("id", -1);
         boolean result = wiseSayingService.delete(id);
 
         if(!result) {
@@ -62,7 +88,7 @@ public class WiseSayingController {
     }
 
     public void actionModify(Command cmd) {
-        int id = cmd.getParamAsInt("id");
+        int id = cmd.getParamAsInt("id", -1);
         Optional<WiseSaying> opWiseSaying = wiseSayingService.getItem(id);
 
         WiseSaying wiseSaying = opWiseSaying.orElse(null);
@@ -89,5 +115,9 @@ public class WiseSayingController {
     public void actionBuild() {
         wiseSayingService.build();
         System.out.println("data.json 파일의 내용이 갱신되었습니다.");
+    }
+
+    public void makeSampleData(int cnt) {
+        wiseSayingService.makeSampleData(cnt);
     }
 }

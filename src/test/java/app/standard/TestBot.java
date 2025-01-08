@@ -23,4 +23,9 @@ public class TestBot {
         return out.toString();
 
     }
+
+    public static void makeSample(int cnt) {
+        App app = new App(null);
+        app.makeSampleData(cnt); // file 저장
+    }
 }
