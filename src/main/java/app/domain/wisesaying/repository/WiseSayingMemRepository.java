@@ -44,4 +44,9 @@ public class WiseSayingMemRepository implements WiseSayingRepository{
                 .filter(w -> w.getId() == id)
                 .findFirst();
     }
+
+
+    public void build() {
+
+    }
 }
