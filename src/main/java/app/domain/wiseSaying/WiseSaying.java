@@ -1,4 +1,4 @@
-package app.domain.wisesaying;
+package app.domain.wiseSaying;
 
 import lombok.*;
 

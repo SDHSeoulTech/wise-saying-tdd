@@ -1,6 +1,6 @@
-package app.domain.wisesaying;
-import app.domain.wisesaying.repository.RepositoryProvider;
-import app.domain.wisesaying.repository.WiseSayingRepository;
+package app.domain.wiseSaying;
+import app.domain.wiseSaying.repository.RepositoryProvider;
+import app.domain.wiseSaying.repository.WiseSayingRepository;
 
 import java.util.List;
 import java.util.Optional;
@@ -18,8 +18,8 @@ public class WiseSayingService {
 
     }
 
-    public List<WiseSaying> getAllItems() {
-        return wiseSayingRepository.findAll();
+    public Page<WiseSaying> getAllItems(int itemsPerPage, int page) {
+        return wiseSayingRepository.findAll(itemsPerPage, page);
     }
 
 
@@ -42,16 +42,8 @@ public class WiseSayingService {
         wiseSayingRepository.build();
     }
 
-    public List<WiseSaying> search(String ktype, String kw) {
-        return wiseSayingRepository.findAll().stream()
-                .filter(w -> {
-                    if(ktype.equals("content")) {
-                        return w.getContent().contains(kw);
-                    } else {
-                        return w.getAuthor().contains(kw);
-                    }
-                })
-                .toList();
+    public Page<WiseSaying> search(String ktype, String kw, int itemsPerPage, int page) {
+        return wiseSayingRepository.findByKeword(ktype, kw, itemsPerPage, page);
     }
 
     public void makeSampleData(int cnt) {

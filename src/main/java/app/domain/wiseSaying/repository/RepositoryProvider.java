@@ -1,6 +1,4 @@
-package app.domain.wisesaying.repository;
-
-import app.global.AppConfig;
+package app.domain.wiseSaying.repository;
 
 public class RepositoryProvider {
 

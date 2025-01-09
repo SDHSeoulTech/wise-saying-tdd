@@ -1,8 +1,7 @@
-package app.domain.wisesaying;
+package app.domain.wiseSaying;
 
 import app.global.Command;
 
-import java.nio.file.Path;
 import java.util.List;
 import java.util.Optional;
 import java.util.Scanner;
@@ -11,11 +10,13 @@ public class WiseSayingController {
 
     private final Scanner sc;
     private WiseSayingService wiseSayingService;
+    private int itemsPerPage;
 
 
     public WiseSayingController(Scanner sc) {
         this.sc = sc;
         wiseSayingService = new WiseSayingService();
+        itemsPerPage = 5;
     }
 
     public void actionWrite() {
@@ -30,40 +31,39 @@ public class WiseSayingController {
     }
 
     public void actionPrint(Command command) {
+        // 역할 분리 -> 출력, 데이터 처리
+        // 출력 / 처리
+
         System.out.println("번호 / 작가 / 명언");
         System.out.println("-----------------");
 
 
         int page = command.getParamAsInt("page", 1);
-        List<WiseSaying> wiseSayingList;
+        Page<WiseSaying> pageContent;
 
         if(command.isSearchCommand()) {
             String ktype = command.getParam("keywordType");
             String kw = command.getParam("keyword");
-            wiseSayingList = wiseSayingService.search(ktype, kw);
+            pageContent = wiseSayingService.search(ktype, kw, itemsPerPage, page);
         } else {
-            wiseSayingList = wiseSayingService.getAllItems();
+            pageContent = wiseSayingService.getAllItems(itemsPerPage, page);
         }
 
 
-        if(wiseSayingList.isEmpty()) {
+        if(pageContent.getContent().isEmpty()) {
             System.out.println("등록된 명언이 없습니다.");
             return;
         }
 
-        wiseSayingList.reversed().forEach(w -> {
+        pageContent.getContent().forEach(w -> {
             System.out.printf("%d / %s / %s\n", w.getId(), w.getAuthor(), w.getContent());
         });
 
-        printPage(page);
+        printPage(page, pageContent.getTotalPages());
     }
 
-    private void printPage(int page) {
 
-        // 2대신 전체 페이지 개수로 세팅
-        int totalItems = wiseSayingService.count();
-        int itemsPerPage = 5;
-        int totalPages = (int)Math.ceil((double)totalItems / itemsPerPage); // -> 올림 처리
+    private void printPage(int page, int totalPages) {
 
         for(int i = 1; i <= totalPages; i++) {
             if(i == page) {

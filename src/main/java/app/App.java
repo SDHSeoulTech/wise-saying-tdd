@@ -1,7 +1,7 @@
 package app;
 
-import app.domain.wisesaying.SystemController;
-import app.domain.wisesaying.WiseSayingController;
+import app.domain.wiseSaying.SystemController;
+import app.domain.wiseSaying.WiseSayingController;
 import app.global.Command;
 
 import java.util.Scanner;
